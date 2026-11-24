@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Aapico Avee NEV">
 <meta name="theme-color" content="#071226">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.png?v=5">
-<link rel="apple-touch-icon" href="icon.png?v=5">
+<link rel="manifest" href="manifest.webmanifest?v=6">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
 <style>
 html,body{margin:0;height:100%;background:#071226;overflow:hidden}
 iframe{position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#071226}
@@ -20,7 +20,14 @@ iframe{position:fixed;left:0;top:0;width:100%;height:100%;border:0;background:#0
 <body>
 <iframe src="https://script.google.com/macros/s/AKfycbwHwwk9KfNSEQgY-yusaHJdLsP2Kt6UQxKCATMGNIOd_8Df-KqRR_6QGsCV9nMGiPQK/exec?view=app" allow="fullscreen" title="Aapico Avee NEV"></iframe>
 <script>
-(function(){var f=document.querySelector("iframe");function fit(){var h=window.innerHeight;if(navigator.standalone){var L=window.matchMedia("(orientation: landscape)").matches,a=screen.width,b=screen.height;h=Math.max(h,L?Math.min(a,b):Math.max(a,b))}document.documentElement.style.height=document.body.style.height=f.style.height=h+"px"}fit();addEventListener("resize",fit);addEventListener("orientationchange",function(){setTimeout(fit,300)})})();
+(function(){var f=document.querySelector("iframe"),off=0;
+function fit(){var h=window.innerHeight;if(navigator.standalone){var L=window.matchMedia("(orientation: landscape)").matches,a=screen.width,b=screen.height;h=Math.max(h,L?Math.min(a,b):Math.max(a,b))}
+document.documentElement.style.height=document.body.style.height=h+"px";f.style.top=(-off)+"px";f.style.height=(h+off)+"px"}
+fit();addEventListener("resize",fit);addEventListener("orientationchange",function(){setTimeout(fit,300)});
+/* Google shows a notice bar above the app for viewers who are not the owner. The app reports its own height;
+   the difference is that bar, so the frame is moved up by that much to keep it off screen. */
+addEventListener("message",function(e){var m=e.data;if(!m||m.nev!=="ih"||!(m.h>0))return;var d=Math.round(f.getBoundingClientRect().height-m.h);if(d>4&&d<220&&Math.abs(d-off)>2){off=d;fit()}});
+})();
 </script>
 </body>
 </html>
