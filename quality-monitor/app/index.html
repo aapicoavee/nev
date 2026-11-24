@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AAPICO AVEE Quality Monitor</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0b1d3f">
+<style>
+:root{color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f4f5f7;color:#0b1d3f;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px}
+.card{background:#fff;border:1px solid #e6e8ec;border-radius:20px;box-shadow:0 10px 40px rgb(11 29 63/.08);padding:36px 32px;max-width:420px;width:100%;text-align:center}
+.card img{width:96px;height:96px;border-radius:22px;border:1px solid #e6e8ec}
+h1{font-size:24px;margin:16px 0 4px;line-height:1.2}
+p{margin:0 0 22px;color:#5d6675}
+a.btn,button{display:flex;align-items:center;justify-content:center;width:100%;min-height:50px;border:0;border-radius:12px;font:600 16px system-ui,sans-serif;cursor:pointer;text-decoration:none}
+a.btn{background:#0a6fe8;color:#fff}
+button{margin-top:10px;background:#fff;color:#0b1d3f;border:1px solid #d5d9e0}
+button[hidden]{display:none}
+small{display:block;margin-top:16px;color:#8a93a3;font-size:13px}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="icon-192.png" alt="AAPICO AVEE">
+  <h1>Quality Monitor</h1>
+  <p>TQO findings &amp; road test rejections</p>
+  <a class="btn" id="open" href="https://claude.ai/artifact/62h22JN83ZAfXznA1WP6Z9">Open Quality Monitor</a>
+  <button id="install" hidden>Install as app</button>
+  <small id="hint">To install: Chrome or Edge menu ⋮ → Cast, save and share → Install page as app.</small>
+</div>
+<script>
+{
+const url='https://claude.ai/artifact/62h22JN83ZAfXznA1WP6Z9';
+const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+if(standalone){document.getElementById('hint').textContent='Opening…';location.replace(url)}
+let ev=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();ev=e;const b=document.getElementById('install');b.hidden=false;document.getElementById('hint').textContent='Install once, then open it from your desktop or Start menu.'});
+document.getElementById('install').onclick=async()=>{if(!ev)return;ev.prompt();await ev.userChoice;ev=null;document.getElementById('install').hidden=true};
+addEventListener('appinstalled',()=>{document.getElementById('hint').textContent='Installed. Open “Quality Monitor” from your desktop or Start menu.'});
+}
+</script>
+</body>
+</html>
