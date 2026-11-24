@@ -18,6 +18,7 @@ h1{font-size:24px;margin:16px 0 4px;line-height:1.2}
 p{margin:0 0 22px;color:#5d6675}
 a.btn,button{display:flex;align-items:center;justify-content:center;width:100%;min-height:50px;border:0;border-radius:12px;font:600 16px system-ui,sans-serif;cursor:pointer;text-decoration:none}
 a.btn{background:#0a6fe8;color:#fff}
+a.btn2{margin-top:10px;background:#0b1d3f}
 button{margin-top:10px;background:#fff;color:#0b1d3f;border:1px solid #d5d9e0}
 button[hidden]{display:none}
 small{display:block;margin-top:16px;color:#8a93a3;font-size:13px}
@@ -28,13 +29,14 @@ small{display:block;margin-top:16px;color:#8a93a3;font-size:13px}
   <img src="icon-192.png" alt="AAPICO AVEE">
   <h1>Quality Monitor</h1>
   <p>TQO findings &amp; road test rejections</p>
-  <a class="btn" id="open" href="https://claude.ai/artifact/62h22JN83ZAfXznA1WP6Z9">Open Quality Monitor</a>
+  <a class="btn" id="open" href="https://script.google.com/macros/s/AKfycbyiWQXcLkXfMZ55FEa4sOJ-OLIrDBpahAfp_72Vi7guljjdkrXZGyy0aDGQS-OGiLO7pg/exec">Team leader · Key in</a>
+  <a class="btn btn2" href="https://script.google.com/macros/s/AKfycbyiWQXcLkXfMZ55FEa4sOJ-OLIrDBpahAfp_72Vi7guljjdkrXZGyy0aDGQS-OGiLO7pg/exec?view=app">Office monitor</a>
   <button id="install" hidden>Install as app</button>
   <small id="hint">To install: Chrome or Edge menu ⋮ → Cast, save and share → Install page as app.</small>
 </div>
 <script>
 {
-const url='https://claude.ai/artifact/62h22JN83ZAfXznA1WP6Z9';
+const url='https://script.google.com/macros/s/AKfycbyiWQXcLkXfMZ55FEa4sOJ-OLIrDBpahAfp_72Vi7guljjdkrXZGyy0aDGQS-OGiLO7pg/exec';
 const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
 if(standalone){document.getElementById('hint').textContent='Opening…';location.replace(url)}
 let ev=null;
