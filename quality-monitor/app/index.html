@@ -711,6 +711,12 @@ function boot(){let b=null;try{b=JSON.parse(localStorage.getItem('qm-cache')||'n
   loading=true;api('boot').then(d=>{rows=d.rows||[];Object.assign(TH,d.thumbs||{});lastOk=Date.now();loading=false;refresh();saveCache();status('Live · updated '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),'live')}).catch(()=>{loading=false;load()});
   setInterval(load,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastOk>15000)load()})}
 preview();drawThumbs();route();renderSide();boot();
+/* auto-update: reload when a newer version of this page is published */
+const APPV='20261125b';
+function checkUpdate(){if(document.hidden)return;fetch(location.href.split('#')[0],{cache:'reload'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/const APPV='([^']+)'/);if(!m||m[1]===APPV)return;let done='';try{done=sessionStorage.getItem('qm-upd')||''}catch{}if(done===m[1])return;
+  const busy=editing||$('issue').value.trim()||photos.length||$('bay')===document.activeElement||$('maker')===document.activeElement;if(busy)return;try{sessionStorage.setItem('qm-upd',m[1])}catch{}location.reload()}).catch(()=>{})}
+setTimeout(checkUpdate,4000);setInterval(checkUpdate,10*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate()});
+
 }
 </script>
 </body>
