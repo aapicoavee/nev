@@ -233,7 +233,7 @@ kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border
 .empty{display:grid;justify-items:center;gap:8px;text-align:center;padding:36px 16px;color:var(--mut);font-size:14px}
 .empty .ei{width:46px;height:46px;border-radius:50%;background:var(--sunk);display:grid;place-items:center}
 /* records */
-.rt{padding:0;overflow:hidden}
+.rt{padding:0;position:relative;z-index:3}.rt .scroll{border-radius:0 0 var(--r) var(--r)}
 .rbar{display:flex;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .rbar .srch{flex:1 1 240px}.rend{display:flex;gap:10px;align-items:center;margin-left:auto}
 .rt .achips{margin:0;padding:10px 16px;border-bottom:1px solid var(--line)}.rt .achips:empty{display:none}
