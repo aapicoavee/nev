@@ -22,7 +22,7 @@
    LAYOUT: sidebar app shell above 900px, bottom tab bar on phones; 12-col card grid */
 :root{color-scheme:light dark;
 --bg:light-dark(#f4f5f7,#0d0f13);--card:light-dark(#ffffff,#161920);--sunk:light-dark(#f0f1f4,#1d2129);--ink:light-dark(#0b1d3f,#eef0f4);--ink2:light-dark(#3b414c,#c3c8d1);--mut:light-dark(#6b7280,#8b92a0);--line:light-dark(#e6e8ec,#262a33);--line2:light-dark(#d5d9e0,#323844);
---tqo:light-dark(#0a6fe8,#5aa2ff);--tqo-s:light-dark(#e8f1fe,#13274a);--rt:light-dark(#e5484d,#ff6b70);--rt-s:light-dark(#fdecec,#3a1c1f);--ok:light-dark(#18794e,#4cc38a);--ok-s:light-dark(#e6f6ee,#14301f);--sig:#f5c400;
+--tqo:light-dark(#0a6fe8,#5aa2ff);--tqo-s:light-dark(#e8f1fe,#13274a);--rt:light-dark(#e5484d,#ff6b70);--rt-s:light-dark(#fdecec,#3a1c1f);--am:light-dark(#7c3aed,#a78bfa);--am-s:light-dark(#f1ebfe,#2a1f45);--ok:light-dark(#18794e,#4cc38a);--ok-s:light-dark(#e6f6ee,#14301f);--sig:#f5c400;
 --r:14px;--sh:0 1px 2px rgb(16 24 40/.05),0 1px 3px rgb(16 24 40/.06)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
@@ -99,12 +99,14 @@ section[hidden]{display:none}
 @media(max-width:1100px){.kin{grid-template-columns:minmax(0,1fr)}}
 .grp{padding:18px 0;border-top:1px solid var(--line)}.grp:first-child{border-top:0;padding-top:0}
 .gl{font-size:12px;font-weight:600;color:var(--mut);margin-bottom:10px;display:flex;justify-content:space-between}
-.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:620px){.types{grid-template-columns:1fr}}
 .type{display:flex;gap:12px;align-items:center;text-align:left;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);min-height:64px;transition:border-color .15s,background .15s}
 .type .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--sunk);flex:none}
 .type b{display:block;font-weight:600}.type small{color:var(--mut);font-size:12px}
 .type[aria-pressed=true][data-t=TQO]{border-color:var(--tqo);background:var(--tqo-s)}.type[aria-pressed=true][data-t=TQO] .ic{background:var(--tqo);color:#fff}
 .type[aria-pressed=true][data-t=RT]{border-color:var(--rt);background:var(--rt-s)}.type[aria-pressed=true][data-t=RT] .ic{background:var(--rt);color:#fff}
+.type[aria-pressed=true][data-t=AM]{border-color:var(--am);background:var(--am-s)}.type[aria-pressed=true][data-t=AM] .ic{background:var(--am);color:#fff}
 .drop{border:1.5px dashed var(--line2);border-radius:12px;background:var(--sunk);min-height:200px;display:grid;place-items:center;text-align:center;padding:18px;cursor:pointer;transition:border-color .15s,background .15s}
 .drop:hover,.drop.over{border-color:var(--ink2)}
 .drop .big{width:52px;height:52px;border-radius:50%;background:var(--card);display:grid;place-items:center;margin:0 auto 10px;box-shadow:var(--sh)}
@@ -135,13 +137,13 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ink2);box-s
 .actions .k{margin-right:auto;font-size:12px;color:var(--mut)}
 kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:1px 5px}
 .btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;border:0;border-radius:10px;padding:12px 18px;min-height:46px;font-weight:600;color:#fff;background:var(--ink)}
-.btn.TQO{background:var(--tqo)}.btn.RT{background:var(--rt)}
+.btn.TQO{background:var(--tqo)}.btn.RT{background:var(--rt)}.btn.AM{background:var(--am)}
 .btn[disabled]{opacity:.55;cursor:progress}
 .btn2{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line2);background:var(--card);border-radius:10px;padding:9px 14px;min-height:42px;font-weight:500}
 .btn2:hover{background:var(--sunk)}
 /* tag preview */
 .tag{border-radius:16px;color:#fff;padding:20px 20px 18px;position:relative;overflow:hidden;background:var(--tqo);transition:background .2s}
-.tag.RT{background:var(--rt)}
+.tag.RT{background:var(--rt)}.tag.AM{background:var(--am)}
 .tag::before{content:"";position:absolute;top:18px;right:18px;width:18px;height:18px;border-radius:50%;background:var(--bg);box-shadow:inset 0 0 0 4px rgb(0 0 0/.12)}
 .tag .t1{font-size:12px;font-weight:600;opacity:.85}
 .tag .t2{font:800 22px/1.15 "Inter Tight",Inter,system-ui,sans-serif;margin:6px 40px 14px 0;min-height:50px;overflow-wrap:anywhere}
@@ -149,7 +151,7 @@ kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border
 .tag dt{font-size:11px;opacity:.75}.tag dd{margin:2px 0 0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag .pics{display:flex;gap:6px;margin-top:14px}.tag .pics img{width:54px;height:40px;object-fit:cover;border-radius:6px;border:2px solid rgb(255 255 255/.5)}
 .side-st{display:grid;gap:20px}
-.today{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.today{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .today div{background:var(--sunk);border-radius:12px;padding:12px 14px}
 .today b{font:800 28px "Inter Tight",Inter,system-ui,sans-serif;display:block;font-variant-numeric:tabular-nums}
 .today span{font-size:12px;color:var(--mut)}
@@ -162,7 +164,7 @@ kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border
 .fi time{font-size:12px;color:var(--mut);white-space:nowrap}
 .pill{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
 .pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
-.pill.TQO{background:var(--tqo-s);color:var(--tqo)}.pill.RT{background:var(--rt-s);color:var(--rt)}
+.pill.TQO{background:var(--tqo-s);color:var(--tqo)}.pill.RT{background:var(--rt-s);color:var(--rt)}.pill.AM{background:var(--am-s);color:var(--am)}
 .pill.Open{background:var(--rt-s);color:var(--rt)}.pill.Closed{background:var(--ok-s);color:var(--ok)}
 /* dashboard */
 .seg{display:inline-flex;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:3px}
@@ -172,7 +174,7 @@ kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border
 .seg button{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex:none;transition:background .15s,color .15s}
 .seg button:hover{color:var(--ink)}
 .seg button .sd{width:7px;height:7px;border-radius:50%;background:var(--c)}
-.seg button[aria-pressed=true][data-v=TQO]{color:var(--tqo)}.seg button[aria-pressed=true][data-v=RT]{color:var(--rt)}.seg button[aria-pressed=true][data-v=Open]{color:var(--rt)}.seg button[aria-pressed=true][data-v=Closed]{color:var(--ok)}
+.seg button[aria-pressed=true][data-v=TQO]{color:var(--tqo)}.seg button[aria-pressed=true][data-v=RT]{color:var(--rt)}.seg button[aria-pressed=true][data-v=AM]{color:var(--am)}.seg button[aria-pressed=true][data-v=Open]{color:var(--rt)}.seg button[aria-pressed=true][data-v=Closed]{color:var(--ok)}
 
 .fwrap{position:relative}
 .fbtn{display:inline-flex;gap:9px;align-items:center;border:1px solid var(--line2);background:var(--card);border-radius:10px;padding:9px 14px;min-height:44px;font-weight:600;box-shadow:var(--sh);transition:border-color .15s}
@@ -201,8 +203,8 @@ kbd{font:11px Inter;border:1px solid var(--line2);border-bottom-width:2px;border
 .fpanel::before{content:"";display:block;width:40px;height:4px;border-radius:9px;background:var(--line2);margin:10px auto 0}
 .fscrim{display:block;position:fixed;inset:0;background:rgb(10 12 16/.45);z-index:24;opacity:0;pointer-events:none;transition:opacity .2s}.fscrim.on{opacity:1;pointer-events:auto}}
 .tools select{width:auto;min-height:42px;padding:8px 32px 8px 12px;font-size:14px}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}
-@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-bottom:14px}
+@media(max-width:1000px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpis>.kpi:first-child{grid-column:1/-1}}
 .kpi{padding:16px 18px}
 .kpi .lb{font-size:13px;color:var(--mut);display:flex;gap:8px;align-items:center}
 .kpi .lb i{width:8px;height:8px;border-radius:2px;background:var(--c,var(--ink))}
@@ -295,6 +297,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
 <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
 <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2 4 2 4H5"/></symbol>
 <symbol id="i-road" viewBox="0 0 24 24"><path d="M8 3L4 21M16 3l4 18M12 4v3M12 11v3M12 18v2"/></symbol>
+<symbol id="i-am" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L4 16.8V20h3.2l5.3-5.3a4 4 0 005.2-5.4l-2.5 2.5-2.3-.6-.6-2.3z"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/></symbol>
 <symbol id="s-ip" viewBox="0 0 32 32"><path d="M3 20c2-7 7-10 13-10s11 3 13 10"/><path d="M3 20h26v4H3z"/><circle cx="11" cy="17" r="2.5"/><circle cx="21" cy="17" r="2.5"/></symbol>
 <symbol id="s-door" viewBox="0 0 32 32"><path d="M6 27V12l7-7h13v22z"/><path d="M6 14h20M20 19h3"/></symbol>
@@ -304,7 +307,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
 
 <div class="app">
 <aside class="side">
-  <div class="brand"><div class="brow"><img class="bmark" src="https://aapicoavee.github.io/nev/quality-monitor/app/icon-192.png" alt="" width="40" height="40"><span class="bname">AAPICO AVEE</span></div><div class="bsub"><b>Quality Monitor</b><small>TQO &amp; Road Test · <span class="mode-tag" id="modeTag">Team leader</span></small></div></div>
+  <div class="brand"><div class="brow"><img class="bmark" src="https://aapicoavee.github.io/nev/quality-monitor/app/icon-192.png" alt="" width="40" height="40"><span class="bname">AAPICO AVEE</span></div><div class="bsub"><b>Quality Monitor</b><small>TQO · Road Test · After Market · <span class="mode-tag" id="modeTag">Team leader</span></small></div></div>
   <nav class="nav">
     <a href="#key-in" data-v="key-in"><svg class="i"><use href="#i-plus"/></svg>Key in</a>
     <a href="#dashboard" data-v="dashboard"><svg class="i"><use href="#i-chart"/></svg>Dashboard</a>
@@ -318,7 +321,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
 <main>
 
 <section id="v-key-in">
-  <div class="ph"><div><h1>Key in an issue</h1><p>Log a TQO finding or road test rejection with photo evidence.</p></div></div>
+  <div class="ph"><div><h1>Key in an issue</h1><p>Log a TQO finding, road test rejection or after market issue with photo evidence.</p></div></div>
   <div class="kin">
     <form class="card" id="f" novalidate>
       <div class="grp">
@@ -326,6 +329,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
         <div class="types">
           <button type="button" class="type" data-t="TQO" aria-pressed="true"><span class="ic"><svg class="i"><use href="#i-flag"/></svg></span><span><b>TQO Finding</b><small>Found at quality gate</small></span></button>
           <button type="button" class="type" data-t="RT" aria-pressed="false"><span class="ic"><svg class="i"><use href="#i-road"/></svg></span><span><b>Road Test Rejection</b><small>Rejected after road test</small></span></button>
+          <button type="button" class="type" data-t="AM" aria-pressed="false"><span class="ic"><svg class="i"><use href="#i-am"/></svg></span><span><b>After Market Issue</b><small>Reported after delivery</small></span></button>
         </div>
       </div>
       <div class="grp">
@@ -364,7 +368,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
       </div>
       <div class="card">
         <div class="card-h"><h2>Today</h2><span id="todayD"></span></div>
-        <div class="today"><div><b id="tdT">0</b><span>TQO findings</span></div><div><b id="tdR">0</b><span>Road test rejections</span></div></div>
+        <div class="today"><div><b id="tdT">0</b><span>TQO findings</span></div><div><b id="tdR">0</b><span>Road test rejections</span></div><div><b id="tdA">0</b><span>After market issues</span></div></div>
       </div>
       <div class="card"><div class="card-h"><h2>Latest entries</h2><a href="#records" class="btn2" style="text-decoration:none;color:var(--ink);min-height:34px;padding:5px 10px;font-size:13px">View all</a></div><div class="feed" id="feed"></div></div>
     </div>
@@ -372,12 +376,12 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
 </section>
 
 <section id="v-dashboard" hidden>
-  <div class="ph"><div><h1 id="headline">Quality dashboard</h1><p id="subline">Trends across TQO findings and road test rejections.</p></div>
+  <div class="ph"><div><h1 id="headline">Quality dashboard</h1><p id="subline">Trends across TQO findings, road test rejections and after market issues.</p></div>
     <div class="fwrap"><button type="button" class="fbtn" id="fBtnD" aria-expanded="false" aria-controls="fpD"><svg class="i"><path d="M4 7h16M7 12h10M10 17h4"/></svg>Filters<span class="fbadge" id="fbD" hidden></span></button>
       <div class="fpanel" id="fpD" role="dialog" aria-label="Dashboard filters">
         <div class="fph"><b>Filters</b><button type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
         <div class="fg"><span class="fgl">Period</span><div class="seg" id="range"><button data-d="day" aria-pressed="false">Day</button><button data-d="7" aria-pressed="false">7D</button><button data-d="30" aria-pressed="true">30D</button><button data-d="90" aria-pressed="false">90D</button><button data-d="0" aria-pressed="false">All</button></div></div>
-        <div class="fg"><span class="fgl">Type</span><select id="fType" aria-label="Type"><option value="" data-s="All">All types</option><option value="TQO" data-s="TQO">TQO only</option><option value="RT" data-s="Road test">Road test only</option></select></div>
+        <div class="fg"><span class="fgl">Type</span><select id="fType" aria-label="Type"><option value="" data-s="All">All types</option><option value="TQO" data-s="TQO">TQO only</option><option value="RT" data-s="Road test">Road test only</option><option value="AM" data-s="After market">After market only</option></select></div>
         <div class="fg"><span class="fgl">Sub</span><select id="fSub" aria-label="Sub"><option value="" data-s="All">All subs</option><option>IP</option><option>Door</option><option>Front Sub</option><option>Rear Sub</option></select></div>
         <div class="fpf"><button type="button" class="reset" id="fReset">Reset all</button><button type="button" class="btn" data-close>Show results</button></div>
       </div></div>
@@ -386,7 +390,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
   <div class="daynav" id="daynav" hidden><button type="button" class="dnb" id="dPrev" aria-label="Previous day"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><input type="date" id="dPick" aria-label="Day"><button type="button" class="dnb" id="dNext" aria-label="Next day"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button type="button" class="btn2" id="dToday">Today</button><span class="dlab" id="dLab"></span></div>
   <div class="kpis" id="kpis"></div>
   <div class="dg">
-    <div class="card c8"><div class="card-h"><h2 id="trendT">Daily trend</h2><div class="lg"><span><i style="background:var(--tqo)"></i>TQO</span><span><i style="background:var(--rt)"></i>Road test</span></div></div><div class="fig" id="trend"><svg></svg><div class="tip"></div></div></div>
+    <div class="card c8"><div class="card-h"><h2 id="trendT">Daily trend</h2><div class="lg"><span><i style="background:var(--tqo)"></i>TQO</span><span><i style="background:var(--rt)"></i>Road test</span><span><i style="background:var(--am)"></i>After market</span></div></div><div class="fig" id="trend"><svg></svg><div class="tip"></div></div></div>
     <div class="card c4"><div class="card-h"><h2>By sub</h2><span>share of issues</span></div><div class="hb" id="bSub"></div></div>
     <div class="card c6"><div class="card-h"><h2>Pareto of issues</h2><span>top defects · cumulative %</span></div><div class="fig" id="pareto"><svg></svg><div class="tip"></div></div></div>
     <div class="card c6"><div class="card-h"><h2>Bay × sub heatmap</h2><span>where issues concentrate</span></div><div class="hm" id="heat"></div></div>
@@ -404,7 +408,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
         <div class="fwrap"><button type="button" class="fbtn" id="fBtnR" aria-expanded="false" aria-controls="fpR"><svg class="i"><path d="M4 7h16M7 12h10M10 17h4"/></svg>Filters<span class="fbadge" id="fbR" hidden></span></button>
           <div class="fpanel" id="fpR" role="dialog" aria-label="Record filters">
             <div class="fph"><b>Filters</b><button type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
-            <div class="fg"><span class="fgl">Type</span><select id="rType" aria-label="Type"><option value="" data-s="All">All types</option><option value="TQO" data-s="TQO">TQO</option><option value="RT" data-s="Road test">Road test</option></select></div>
+            <div class="fg"><span class="fgl">Type</span><select id="rType" aria-label="Type"><option value="" data-s="All">All types</option><option value="TQO" data-s="TQO">TQO</option><option value="RT" data-s="Road test">Road test</option><option value="AM" data-s="After market">After market</option></select></div>
             <div class="fg"><span class="fgl">Sub</span><select id="rSub" aria-label="Sub"><option value="" data-s="All">All subs</option><option>IP</option><option>Door</option><option>Front Sub</option><option>Rear Sub</option></select></div>
             <div class="fg"><span class="fgl">Status</span><select id="rSt" aria-label="Status"><option value="" data-s="Any">Any status</option><option>Open</option><option>Closed</option></select></div>
             <div class="fpf"><button type="button" class="reset" id="rReset">Reset all</button><button type="button" class="btn" data-close>Show results</button></div>
@@ -430,9 +434,9 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
   <div class="ch-in">
     <img src="https://aapicoavee.github.io/nev/quality-monitor/app/icon-192.png" alt="AAPICO AVEE">
     <h1>Quality Monitor</h1>
-    <p>TQO findings &amp; road test rejections. Choose how you use this device.</p>
+    <p>TQO findings, road test rejections &amp; after market issues. Choose how you use this device.</p>
     <div class="ch-g">
-      <button type="button" class="ch-c" data-mode="tl"><span class="ic" style="background:var(--tqo)"><svg class="i"><use href="#i-plus"/></svg></span><b>Team leader</b><small>Key in TQO findings and road test rejections with photos. Dashboard and records included.</small></button>
+      <button type="button" class="ch-c" data-mode="tl"><span class="ic" style="background:var(--tqo)"><svg class="i"><use href="#i-plus"/></svg></span><b>Team leader</b><small>Key in TQO findings, road test rejections and after market issues with photos. Dashboard and records included.</small></button>
       <button type="button" class="ch-c" data-mode="app"><span class="ic" style="background:var(--ink)"><svg class="i"><use href="#i-chart"/></svg></span><b>Office monitor</b><small>Live dashboard and records for the office screen. Refreshes every 30 seconds.</small></button>
     </div>
     <p style="margin-top:18px;font-size:13px">You can switch any time from the menu.</p>
@@ -453,13 +457,13 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const SUBS=['IP','Door','Front Sub','Rear Sub'];
-const TN={TQO:'TQO finding',RT:'Road test rejection'};
+const TN={TQO:'TQO finding',RT:'Road test rejection',AM:'After market issue'};
 const ymd=d=>new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const today=()=>ymd(new Date());
 const shift=(n)=>{const d=new Date();d.setDate(d.getDate()+n);return ymd(d)};
 const fmtD=s=>{if(!s)return '';const d=new Date(s+'T00:00');return d.toLocaleDateString(undefined,{day:'numeric',month:'short'})};
 const ago=ms=>{const m=Math.round((Date.now()-ms)/6e4);if(m<1)return 'just now';if(m<60)return m+'m';const h=Math.round(m/60);if(h<24)return h+'h';return Math.round(h/24)+'d'};
-const tyOf=r=>r.type==='RT'?'RT':'TQO';
+const tyOf=r=>r.type==='RT'?'RT':r.type==='AM'?'AM':'TQO';
 const VIEWP=new URLSearchParams(location.search).get('view')||'';let saved='';try{saved=localStorage.getItem('qm-mode')||''}catch{}
 let MON=VIEWP==='app'||(VIEWP!=='tl'&&saved==='app');
 function applyMode(){document.body.classList.toggle('mon',MON);$('modeTag').textContent=MON?'Office monitor':'Team leader';$('swLbl').textContent=MON?'Switch to Team leader':'Switch to Office monitor';$('swLbl2').textContent=MON?'Key in':'Monitor'}
@@ -472,7 +476,7 @@ async function api(fn,...a){let r;try{r=await fetch(API,{method:'POST',credentia
 let type='TQO',sub='',photos=[],rows=[],assets=null,me=null,col=null,range=MON?'day':30,cur=null,selDay='',dayFollow=true;
 
 /* segmented filters replace native selects */
-const DOT={TQO:'var(--tqo)',RT:'var(--rt)',Open:'var(--rt)',Closed:'var(--ok)'};
+const DOT={TQO:'var(--tqo)',RT:'var(--rt)',AM:'var(--am)',Open:'var(--rt)',Closed:'var(--ok)'};
 ['fType','fSub','rType','rSub','rSt'].forEach(id=>{const sel=$(id),g=document.createElement('div');g.className='seg';g.setAttribute('role','group');g.setAttribute('aria-label',sel.getAttribute('aria-label'));
   g.innerHTML=[...sel.options].map(o=>`<button type="button" data-v="${esc(o.value)}" aria-pressed="${o.selected}">${DOT[o.value]?`<i class="sd" style="--c:${DOT[o.value]}"></i>`:''}${esc(o.dataset.s||o.text)}</button>`).join('');
   g.onclick=e=>{const b=e.target.closest('button');if(!b)return;sel.value=b.dataset.v;g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));sel.dispatchEvent(new Event('change'));sel.dispatchEvent(new Event('input'))};
@@ -497,7 +501,7 @@ document.querySelectorAll('.sub').forEach(b=>b.onclick=()=>setSub(b.dataset.s));
 ['issue','bay','maker','date'].forEach(k=>$(k).addEventListener('input',()=>{$('w-'+k)?.classList.remove('bad');if($('e-'+k))$('e-'+k).textContent='';preview()}));
 function preview(){
   $('tag').className='tag '+type;
-  const d=$('date').value;$('tgT').textContent=(type==='RT'?'ROAD TEST REJECTION':'TQO FINDING')+' · '+(d===today()?'today':fmtD(d));
+  const d=$('date').value;$('tgT').textContent=(type==='RT'?'ROAD TEST REJECTION':type==='AM'?'AFTER MARKET ISSUE':'TQO FINDING')+' · '+(d===today()?'today':fmtD(d));
   $('tgI').textContent=$('issue').value.trim()||'Describe the issue…';
   $('tgS').textContent=sub||'—';$('tgB').textContent=$('bay').value.trim()||'—';$('tgM').textContent=$('maker').value.trim()||'—';
   $('tgP').innerHTML=photos.map(p=>`<img src="${p.url}" alt="">`).join('');
@@ -541,15 +545,15 @@ const TH={},thq=new Set();let thT;
 function needTh(id){if(TH[id]!==undefined||thq.has(id))return;thq.add(id);clearTimeout(thT);thT=setTimeout(()=>{const ids=[...thq].filter(i=>TH[i]===undefined);if(!ids.length)return;api('getThumbs',ids).then(m=>{ids.forEach(i=>{TH[i]=(m&&m[i])||''});refresh()}).catch(()=>{ids.forEach(i=>thq.delete(i))})},60)}
 const thumb=r=>{if((r.photos||[]).length&&TH[r._id]===undefined)needTh(r._id);const s=TH[r._id]||'';return s?`<img src="${esc(s)}" alt="" loading="lazy">`:'<span class="np"><svg class="i" style="width:16px;height:16px"><use href="#i-cam"/></svg></span>'};
 const norm=s=>(s||'').toLowerCase().replace(/\s+/g,' ').trim();
-function group(arr,key){const m=new Map();for(const r of arr){const k=(typeof key==='function'?key(r):r[key])||'—';const o=m.get(k)||{TQO:0,RT:0,open:0,label:typeof key==='function'?r.issue:k};o[tyOf(r)]++;if(r.status!=='Closed')o.open++;m.set(k,o)}return [...m].map(([k,v])=>({k,...v,t:v.TQO+v.RT})).sort((a,b)=>b.t-a.t)}
+function group(arr,key){const m=new Map();for(const r of arr){const k=(typeof key==='function'?key(r):r[key])||'—';const o=m.get(k)||{TQO:0,RT:0,AM:0,open:0,label:typeof key==='function'?r.issue:k};o[tyOf(r)]++;if(r.status!=='Closed')o.open++;m.set(k,o)}return [...m].map(([k,v])=>({k,...v,t:v.TQO+v.RT+v.AM})).sort((a,b)=>b.t-a.t)}
 const emptyH=(m,cta)=>`<div class="empty"><div class="ei"><svg class="i"><use href="#i-chart"/></svg></div><div>${m}</div>${cta?'<a class="btn2" href="#key-in" style="text-decoration:none;color:var(--ink)">Key in first issue</a>':''}</div>`;
 function datalists(){const u=k=>[...new Set(rows.map(r=>r[k]).filter(Boolean))].slice(0,60).map(v=>`<option value="${esc(v)}">`).join('');$('bayList').innerHTML=u('bay');$('makerList').innerHTML=u('maker');
   const common=group(rows.slice(0,300),r=>norm(r.issue)).filter(x=>x.t>1).slice(0,4);$('issueChips').innerHTML=common.map(x=>`<button type="button" class="chip">${esc(x.label.slice(0,40))}</button>`).join('');
   $('issueChips').querySelectorAll('.chip').forEach((b,i)=>b.onclick=()=>{$('issue').value=common[i].label;$('w-issue').classList.remove('bad');$('e-issue').textContent='';preview()})}
 
-function renderSide(){const t=today(),td=rows.filter(r=>r.date===t);$('tdT').textContent=td.filter(r=>tyOf(r)==='TQO').length;$('tdR').textContent=td.filter(r=>tyOf(r)==='RT').length;
+function renderSide(){const t=today(),td=rows.filter(r=>r.date===t);$('tdT').textContent=td.filter(r=>tyOf(r)==='TQO').length;$('tdR').textContent=td.filter(r=>tyOf(r)==='RT').length;$('tdA').textContent=td.filter(r=>tyOf(r)==='AM').length;
   const o=rows.filter(r=>r.status!=='Closed').length;$('openCt').hidden=!o;$('openCt').textContent=o;
-  const f=rows.slice(0,5);$('feed').innerHTML=f.length?f.map(r=>`<button type="button" class="fi" data-id="${esc(r._id)}">${thumb(r)}<div><div class="l1">${esc(r.issue)}</div><div class="l2"><span class="pill ${tyOf(r)}">${tyOf(r)==='RT'?'Road test':'TQO'}</span> ${esc(r.sub)} · ${esc(r.bay)}</div></div><time>${r.createdAt?ago(r.createdAt):''}</time></button>`).join(''):emptyH('Nothing keyed in yet. Your entries will show here.');
+  const f=rows.slice(0,5);$('feed').innerHTML=f.length?f.map(r=>`<button type="button" class="fi" data-id="${esc(r._id)}">${thumb(r)}<div><div class="l1">${esc(r.issue)}</div><div class="l2"><span class="pill ${tyOf(r)}">${(tyOf(r)==='RT'?'Road test':tyOf(r)==='AM'?'After market':'TQO')}</span> ${esc(r.sub)} · ${esc(r.bay)}</div></div><time>${r.createdAt?ago(r.createdAt):''}</time></button>`).join(''):emptyH('Nothing keyed in yet. Your entries will show here.');
 }
 $('feed').onclick=e=>{const b=e.target.closest('.fi');if(b)openDrw(b.dataset.id)};
 
@@ -589,41 +593,41 @@ function renderDash(){
   $('daynav').hidden=!isDay;if(isDay){$('dPick').value=selDay;$('dPick').max=today();$('dNext').disabled=selDay>=today();$('dToday').hidden=selDay===today();$('dLab').textContent=selDay===today()?'Today':new Date(selDay+'T00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})}
   $('trendT').textContent=isDay?'Issues by hour keyed in':'Daily trend';
   $('fReset').disabled=range===DEF()&&!$('fType').value&&!$('fSub').value;
-  chips($('achD'),$('fbD'),[{t:isDay?(selDay===today()?'Today':fmtD(selDay)):range?'Last '+range+' days':'All time',on:range!==DEF(),fix:!isDay,clear:()=>document.querySelector('#range button[data-d="'+DEF()+'"]').click()},{t:lab($('fType')),on:!!$('fType').value,c:$('fType').value==='RT'?'var(--rt)':'var(--tqo)',clear:clr('fType')},{t:lab($('fSub')),on:!!$('fSub').value,clear:clr('fSub')}]);
+  chips($('achD'),$('fbD'),[{t:isDay?(selDay===today()?'Today':fmtD(selDay)):range?'Last '+range+' days':'All time',on:range!==DEF(),fix:!isDay,clear:()=>document.querySelector('#range button[data-d="'+DEF()+'"]').click()},{t:lab($('fType')),on:!!$('fType').value,c:DOT[$('fType').value]||'var(--tqo)',clear:clr('fType')},{t:lab($('fSub')),on:!!$('fSub').value,clear:clr('fSub')}]);
   const n=isDay?1:span(),b=base();let f,prev,keys,bucketOf;
   if(isDay){f=b.filter(r=>r.date===selDay);prev=b.filter(r=>r.date===dayShift(selDay,-1));keys=[...Array(24).keys()];bucketOf=r=>r.createdAt?new Date(r.createdAt).getHours():0}
   else{const from=shift(-(n-1)),to=today();f=range?inRange(b,from,to):b;prev=range?inRange(b,shift(-(2*n-1)),shift(-n)):null;keys=dayKeys(n);bucketOf=r=>r.date}
   const daily=(a,fn)=>keys.map(k=>a.filter(r=>bucketOf(r)===k&&fn(r)).length);
-  const K=[['Total issues',r=>true,'var(--ink)'],['TQO findings',r=>tyOf(r)==='TQO','var(--tqo)'],['Road test rejections',r=>tyOf(r)==='RT','var(--rt)'],['Still open',r=>r.status!=='Closed','var(--sig)']];
-  $('kpis').innerHTML=K.map(([l,fn,c],i)=>{const v=f.filter(fn).length;let d='';if(prev&&i<3){const p=prev.filter(fn).length;if(!p&&!v)d='<span class="d eq">no change</span>';else if(!p)d='<span class="d up">new vs prev.</span>';else{const pc=Math.round((v-p)/p*100);d=`<span class="d ${pc>0?'up':pc<0?'dn':'eq'}">${pc>0?'▲':pc<0?'▼':''} ${Math.abs(pc)}% ${isDay?'vs previous day':'vs prev. '+n+'d'}</span>`}}else if(i===3)d=`<span class="d eq">${f.length?Math.round(v/f.length*100):0}% ${isDay?'of the day':'of period'}</span>`;else d='<span class="d eq">all time</span>';
+  const K=[['Total issues',r=>true,'var(--ink)'],['TQO findings',r=>tyOf(r)==='TQO','var(--tqo)'],['Road test rejections',r=>tyOf(r)==='RT','var(--rt)'],['After market issues',r=>tyOf(r)==='AM','var(--am)'],['Still open',r=>r.status!=='Closed','var(--sig)']];
+  $('kpis').innerHTML=K.map(([l,fn,c],i)=>{const v=f.filter(fn).length;let d='';if(prev&&i<4){const p=prev.filter(fn).length;if(!p&&!v)d='<span class="d eq">no change</span>';else if(!p)d='<span class="d up">new vs prev.</span>';else{const pc=Math.round((v-p)/p*100);d=`<span class="d ${pc>0?'up':pc<0?'dn':'eq'}">${pc>0?'▲':pc<0?'▼':''} ${Math.abs(pc)}% ${isDay?'vs previous day':'vs prev. '+n+'d'}</span>`}}else if(i===4)d=`<span class="d eq">${f.length?Math.round(v/f.length*100):0}% ${isDay?'of the day':'of period'}</span>`;else d='<span class="d eq">all time</span>';
     return `<div class="card kpi" style="--c:${c}"><div class="lb"><i></i>${l}</div><div class="num">${v}</div>${d}${spark(daily(f,fn),c)}</div>`}).join('');
   const bySub=group(f,'sub');
   if(f.length){const top=bySub[0];$('headline').textContent=`${top.k} accounts for ${Math.round(top.t/f.length*100)}% of issues`;$('subline').textContent=`${f.length} issue${f.length===1?'':'s'} ${isDay?(selDay===today()?'today':'on '+fmtD(selDay)):range?'in the last '+n+' days':'in all time'} · ${f.filter(r=>r.status!=='Closed').length} still open`}
   else{$('headline').textContent=isDay?(selDay===today()?'No issues today':'No issues on '+fmtD(selDay)):'Quality dashboard';$('subline').textContent=isDay?'Nothing keyed in for this day.':'No issues in this period yet.'}
   const mxS=Math.max(1,...bySub.map(x=>x.t));
-  $('bSub').innerHTML=f.length?SUBS.map(s=>bySub.find(x=>x.k===s)||{k:s,TQO:0,RT:0,t:0}).sort((a,b)=>b.t-a.t).map(x=>`<div class="hr"><div class="tp"><span>${esc(x.k)}</span><span>${x.t} · ${f.length?Math.round(x.t/f.length*100):0}%</span></div><div class="tr">${x.TQO?`<span style="width:${x.TQO/mxS*100}%;background:var(--tqo)"></span>`:''}${x.RT?`<span style="width:${x.RT/mxS*100}%;background:var(--rt)"></span>`:''}</div></div>`).join(''):emptyH('No data yet',true);
+  $('bSub').innerHTML=f.length?SUBS.map(s=>bySub.find(x=>x.k===s)||{k:s,TQO:0,RT:0,AM:0,t:0}).sort((a,b)=>b.t-a.t).map(x=>`<div class="hr"><div class="tp"><span>${esc(x.k)}</span><span>${x.t} · ${f.length?Math.round(x.t/f.length*100):0}%</span></div><div class="tr">${x.TQO?`<span style="width:${x.TQO/mxS*100}%;background:var(--tqo)"></span>`:''}${x.RT?`<span style="width:${x.RT/mxS*100}%;background:var(--rt)"></span>`:''}${x.AM?`<span style="width:${x.AM/mxS*100}%;background:var(--am)"></span>`:''}</div></div>`).join(''):emptyH('No data yet',true);
   const mk=group(f,'maker').slice(0,6),mxM=Math.max(1,...mk.map(x=>x.t));
-  $('bMaker').innerHTML=mk.length?mk.map(x=>`<div class="hr"><div class="tp"><span>${esc(x.k)}</span><span>${x.t} issue${x.t>1?'s':''} · ${x.open} open</span></div><div class="tr">${x.TQO?`<span style="width:${x.TQO/mxM*100}%;background:var(--tqo)"></span>`:''}${x.RT?`<span style="width:${x.RT/mxM*100}%;background:var(--rt)"></span>`:''}</div></div>`).join(''):emptyH('No data yet');
+  $('bMaker').innerHTML=mk.length?mk.map(x=>`<div class="hr"><div class="tp"><span>${esc(x.k)}</span><span>${x.t} issue${x.t>1?'s':''} · ${x.open} open</span></div><div class="tr">${x.TQO?`<span style="width:${x.TQO/mxM*100}%;background:var(--tqo)"></span>`:''}${x.RT?`<span style="width:${x.RT/mxM*100}%;background:var(--rt)"></span>`:''}${x.AM?`<span style="width:${x.AM/mxM*100}%;background:var(--am)"></span>`:''}</div></div>`).join(''):emptyH('No data yet');
   const bays=group(f,'bay').slice(0,8),mxH=Math.max(1,...bays.flatMap(bb=>SUBS.map(s=>f.filter(r=>r.bay===bb.k&&r.sub===s).length)));
   $('heat').innerHTML=bays.length?`<div class="r"><span></span>${SUBS.map(s=>`<span class="h">${s.replace(' Sub','')}</span>`).join('')}</div>`+bays.map(bb=>`<div class="r"><span class="b" title="${esc(bb.k)}">${esc(bb.k)}</span>${SUBS.map(s=>{const v=f.filter(r=>r.bay===bb.k&&r.sub===s).length,p=v?Math.round(12+v/mxH*78):0;return `<span class="x" style="background:${v?`color-mix(in srgb,var(--rt) ${p}%,var(--sunk))`:'var(--sunk)'};color:${p>50?'#fff':'var(--ink2)'}" title="${esc(bb.k)} · ${s}: ${v}">${v||''}</span>`}).join('')}</div>`).join(''):emptyH('No data yet');
   const op=f.filter(r=>r.status!=='Closed').sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)).slice(0,5);
-  $('act').innerHTML=op.length?op.map(r=>`<button type="button" class="ar" data-id="${esc(r._id)}"><div><div class="l1">${esc(r.issue)}</div><div class="l2"><span class="pill ${tyOf(r)}">${tyOf(r)==='RT'?'Road test':'TQO'}</span> ${esc(r.sub)} · ${esc(r.bay)} · ${esc(r.maker)}</div></div><span class="age">${r.createdAt?'open '+ago(r.createdAt):''}</span></button>`).join(''):`<div class="empty"><div class="ei"><svg class="i"><use href="#i-check"/></svg></div>All issues closed.</div>`;
+  $('act').innerHTML=op.length?op.map(r=>`<button type="button" class="ar" data-id="${esc(r._id)}"><div><div class="l1">${esc(r.issue)}</div><div class="l2"><span class="pill ${tyOf(r)}">${(tyOf(r)==='RT'?'Road test':tyOf(r)==='AM'?'After market':'TQO')}</span> ${esc(r.sub)} · ${esc(r.bay)} · ${esc(r.maker)}</div></div><span class="age">${r.createdAt?'open '+ago(r.createdAt):''}</span></button>`).join(''):`<div class="empty"><div class="ei"><svg class="i"><use href="#i-check"/></svg></div>All issues closed.</div>`;
   dash={f,keys,bucketOf,isDay};drawTrend();drawPareto();
 }
 $('act').onclick=e=>{const b=e.target.closest('.ar');if(b)openDrw(b.dataset.id)};
 let dash={f:[],keys:[],bucketOf:r=>r.date,isDay:false};
 const tF=$('trend'),tS=tF.querySelector('svg'),tTip=tF.querySelector('.tip');
 function drawTrend(){if($('v-dashboard').hidden)return;const W=tF.clientWidth,H=tF.clientHeight;if(!W)return;
-  const {f,keys}=dash,T=keys.map(k=>f.filter(r=>dash.bucketOf(r)===k&&tyOf(r)==='TQO').length),R=keys.map(k=>f.filter(r=>dash.bucketOf(r)===k&&tyOf(r)==='RT').length),KL=k=>dash.isDay?String(k).padStart(2,'0')+':00':fmtD(k);
-  const mx=Math.max(4,...T.map((v,i)=>v+R[i])),nice=Math.ceil(mx/4)*4,narrow=W<520,pl=28,pb=24,pt=8,iw=W-pl-4,ih=H-pb-pt,bw=iw/keys.length,y=v=>pt+ih-v/nice*ih;
+  const {f,keys}=dash,T=keys.map(k=>f.filter(r=>dash.bucketOf(r)===k&&tyOf(r)==='TQO').length),R=keys.map(k=>f.filter(r=>dash.bucketOf(r)===k&&tyOf(r)==='RT').length),A=keys.map(k=>f.filter(r=>dash.bucketOf(r)===k&&tyOf(r)==='AM').length),KL=k=>dash.isDay?String(k).padStart(2,'0')+':00':fmtD(k);
+  const mx=Math.max(4,...T.map((v,i)=>v+R[i]+A[i])),nice=Math.ceil(mx/4)*4,narrow=W<520,pl=28,pb=24,pt=8,iw=W-pl-4,ih=H-pb-pt,bw=iw/keys.length,y=v=>pt+ih-v/nice*ih;
   let s='';for(let v=0;v<=nice;v+=nice/4)s+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" ${v?'stroke-dasharray="3 4"':''}/><text x="${pl-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${v}</text>`;
   const w=Math.max(2,Math.min(26,bw*.62)),r=Math.min(4,w/2);
-  keys.forEach((k,i)=>{const x=pl+i*bw+(bw-w)/2;if(T[i]+R[i]){const top=y(T[i]+R[i]),mid=y(T[i]);s+=`<path d="M${x},${y(0)}V${top+r}q0,-${r} ${r},-${r}h${w-2*r}q${r},0 ${r},${r}V${y(0)}z" fill="var(--tqo)"/>`;if(R[i])s+=`<path d="M${x},${mid}V${top+r}q0,-${r} ${r},-${r}h${w-2*r}q${r},0 ${r},${r}V${mid}z" fill="var(--rt)"/>`}});
+  keys.forEach((k,i)=>{const x=pl+i*bw+(bw-w)/2;if(T[i]+R[i]+A[i]){const top=y(T[i]+R[i]+A[i]),mid=y(T[i]),m2=y(T[i]+R[i]);s+=`<path d="M${x},${y(0)}V${top+r}q0,-${r} ${r},-${r}h${w-2*r}q${r},0 ${r},${r}V${y(0)}z" fill="var(--tqo)"/>`;if(R[i]+A[i])s+=`<path d="M${x},${mid}V${top+r}q0,-${r} ${r},-${r}h${w-2*r}q${r},0 ${r},${r}V${mid}z" fill="var(--rt)"/>`;if(A[i])s+=`<path d="M${x},${m2}V${top+r}q0,-${r} ${r},-${r}h${w-2*r}q${r},0 ${r},${r}V${m2}z" fill="var(--am)"/>`}});
   const every=Math.ceil(keys.length/(narrow?4:9));keys.forEach((k,i)=>{if(i%every===0)s+=`<text x="${pl+i*bw+bw/2}" y="${H-6}" text-anchor="middle" font-size="11" fill="var(--mut)">${esc(KL(k))}</text>`});
   s+=`<rect id="hv" x="0" y="${pt}" width="${bw}" height="${ih}" fill="var(--ink)" opacity="0" rx="4"/>`;
   if(!f.length)s+=`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--mut)" font-size="14">No issues in this period</text>`;
   tS.innerHTML=s;
-  tF.onpointermove=e=>{const bx=tF.getBoundingClientRect(),i=Math.floor((e.clientX-bx.left-pl)/bw);if(i<0||i>=keys.length){tTip.style.opacity=0;return}const hv=tS.querySelector('#hv');hv.setAttribute('x',pl+i*bw);hv.setAttribute('opacity',.05);tTip.innerHTML=`<b>${esc(KL(keys[i]))}</b>TQO ${T[i]} · Road test ${R[i]}`;tTip.style.left=Math.min(Math.max(pl+i*bw+bw/2,70),W-70)+'px';tTip.style.top=(y(T[i]+R[i])-8)+'px';tTip.style.opacity=1};
+  tF.onpointermove=e=>{const bx=tF.getBoundingClientRect(),i=Math.floor((e.clientX-bx.left-pl)/bw);if(i<0||i>=keys.length){tTip.style.opacity=0;return}const hv=tS.querySelector('#hv');hv.setAttribute('x',pl+i*bw);hv.setAttribute('opacity',.05);tTip.innerHTML=`<b>${esc(KL(keys[i]))}</b>TQO ${T[i]} · Road test ${R[i]} · After market ${A[i]}`;tTip.style.left=Math.min(Math.max(pl+i*bw+bw/2,70),W-70)+'px';tTip.style.top=(y(T[i]+R[i]+A[i])-8)+'px';tTip.style.opacity=1};
   tF.onpointerleave=()=>{tTip.style.opacity=0;const hv=tS.querySelector('#hv');if(hv)hv.setAttribute('opacity',0)};
 }
 const pF=$('pareto'),pS=pF.querySelector('svg'),pTip=pF.querySelector('.tip');
@@ -644,9 +648,9 @@ const figRO=new ResizeObserver(()=>{drawTrend();drawPareto()});figRO.observe(tF)
 ['q','rType','rSub','rSt'].forEach(k=>$(k).oninput=renderRecords);
 function recF(){const q=norm($('q').value),t=$('rType').value,s=$('rSub').value,st=$('rSt').value;return rows.filter(r=>(!t||r.type===t)&&(!s||r.sub===s)&&(!st||(r.status==='Closed'?'Closed':'Open')===st)&&(!q||norm([r.issue,r.bay,r.maker,r.vin,r.remarks].join(' ')).includes(q)))}
 function renderRecords(){const f=recF();$('rReset').disabled=!$('rType').value&&!$('rSub').value&&!$('rSt').value;
-  chips($('achR'),$('fbR'),[{t:lab($('rType')),on:!!$('rType').value,c:$('rType').value==='RT'?'var(--rt)':'var(--tqo)',clear:clr('rType')},{t:lab($('rSub')),on:!!$('rSub').value,clear:clr('rSub')},{t:lab($('rSt')),on:!!$('rSt').value,c:$('rSt').value==='Closed'?'var(--ok)':'var(--rt)',clear:clr('rSt')}]);$('rCt').textContent=f.length+' of '+rows.length;
+  chips($('achR'),$('fbR'),[{t:lab($('rType')),on:!!$('rType').value,c:DOT[$('rType').value]||'var(--tqo)',clear:clr('rType')},{t:lab($('rSub')),on:!!$('rSub').value,clear:clr('rSub')},{t:lab($('rSt')),on:!!$('rSt').value,c:$('rSt').value==='Closed'?'var(--ok)':'var(--rt)',clear:clr('rSt')}]);$('rCt').textContent=f.length+' of '+rows.length;
   $('rEmpty').hidden=!!f.length;$('rEmpty').innerHTML=rows.length?emptyH('No records match these filters.'):emptyH('No records yet.',true);
-  $('tb').innerHTML=f.map(r=>`<tr data-id="${esc(r._id)}" tabindex="0"><td><div class="ti">${thumb(r)}<div><b>${esc(r.issue)}</b>${r.vin?`<small>VIN ${esc(r.vin)}</small>`:''}</div></div></td><td><span class="pill ${tyOf(r)}">${tyOf(r)==='RT'?'Road test':'TQO'}</span></td><td class="nw">${esc(r.sub)}</td><td>${esc(r.bay)}</td><td>${esc(r.maker)}</td><td class="nw">${esc(fmtD(r.date))}</td><td><span class="pill ${r.status==='Closed'?'Closed':'Open'}">${r.status==='Closed'?'Closed':'Open'}</span></td></tr>`).join('')}
+  $('tb').innerHTML=f.map(r=>`<tr data-id="${esc(r._id)}" tabindex="0"><td><div class="ti">${thumb(r)}<div><b>${esc(r.issue)}</b>${r.vin?`<small>VIN ${esc(r.vin)}</small>`:''}</div></div></td><td><span class="pill ${tyOf(r)}">${(tyOf(r)==='RT'?'Road test':tyOf(r)==='AM'?'After market':'TQO')}</span></td><td class="nw">${esc(r.sub)}</td><td>${esc(r.bay)}</td><td>${esc(r.maker)}</td><td class="nw">${esc(fmtD(r.date))}</td><td><span class="pill ${r.status==='Closed'?'Closed':'Open'}">${r.status==='Closed'?'Closed':'Open'}</span></td></tr>`).join('')}
 $('tb').onclick=e=>{const tr=e.target.closest('tr');if(tr)openDrw(tr.dataset.id)};
 $('tb').onkeydown=e=>{if(e.key==='Enter'){const tr=e.target.closest('tr');if(tr)openDrw(tr.dataset.id)}};
 $('copyCsv').onclick=async()=>{const h=['Date','Type','Issue','Sub','Bay','Made by','VIN','Remarks','Status'];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[h.join(',')].concat(recF().map(r=>[r.date,TN[tyOf(r)],r.issue,r.sub,r.bay,r.maker,r.vin,r.remarks,r.status].map(q).join(','))).join('\n');try{await navigator.clipboard.writeText(csv);toast('Copied '+recF().length+' rows. Paste into Excel.')}catch{toast('Copy was blocked by the browser')}};
@@ -670,7 +674,7 @@ function drawEph(){const r=cur;const ex=ekeep.map(i=>{const p=r.photos[i],u=imgS
   const add=ekeep.length+enew.length<3?'<div class="th add" id="eadd">+ Add photo</div>':'';$('eph').innerHTML=ex+nw+add}
 function startEdit(){const r=cur;if(!r)return;editing=true;ekeep=(r.photos||[]).map((_,i)=>i);enew=[];etype=tyOf(r);esub=r.sub;
   $('dB').innerHTML=`<h3>Edit record</h3><div class="ef">
-  <div class="f"><label>Type</label>${segH('type',[['TQO','TQO finding'],['RT','Road test rejection']],etype)}</div>
+  <div class="f"><label>Type</label>${segH('type',[['TQO','TQO finding'],['RT','Road test rejection'],['AM','After market issue']],etype)}</div>
   <div class="f"><label>Sub</label>${segH('sub',SUBS.map(x=>[x,x]),esub)}</div>
   <div class="f"><label for="e_issue">Issue description *</label><textarea id="e_issue"></textarea></div>
   <div class="row2"><div class="f"><label for="e_bay">Bay *</label><input id="e_bay" list="bayList"></div><div class="f"><label for="e_maker">Made by *</label><input id="e_maker" list="makerList"></div></div>
@@ -712,7 +716,7 @@ function boot(){let b=null;try{b=JSON.parse(localStorage.getItem('qm-cache')||'n
   setInterval(load,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastOk>15000)load()})}
 preview();drawThumbs();route();renderSide();boot();
 /* auto-update: reload when a newer version of this page is published */
-const APPV='20261125b';
+const APPV='20261126a';
 function checkUpdate(){if(document.hidden)return;fetch(location.href.split('#')[0],{cache:'reload'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/const APPV='([^']+)'/);if(!m||m[1]===APPV)return;let done='';try{done=sessionStorage.getItem('qm-upd')||''}catch{}if(done===m[1])return;
   const busy=editing||$('issue').value.trim()||photos.length||$('bay')===document.activeElement||$('maker')===document.activeElement;if(busy)return;try{sessionStorage.setItem('qm-upd',m[1])}catch{}location.reload()}).catch(()=>{})}
 setTimeout(checkUpdate,4000);setInterval(checkUpdate,10*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate()});
