@@ -126,6 +126,8 @@ section[hidden]{display:none}
 @media(max-width:560px){.fl{grid-template-columns:minmax(0,1fr)}}
 .f{display:grid;gap:6px}.f.full{grid-column:1/-1}
 .f label{font-size:13px;font-weight:600;color:var(--ink2)}.f label i{color:var(--rt);font-style:normal}
+input[type=date],input[type=time]{min-width:0}
+.dt2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:8px}.dt2 input{padding-left:10px;padding-right:8px}
 input,select,textarea{font:16px Inter,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:10px 12px;min-height:44px;width:100%;transition:border-color .15s,box-shadow .15s}
 textarea{min-height:96px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ink2);box-shadow:0 0 0 3px color-mix(in srgb,var(--sig) 45%,transparent)}
@@ -353,7 +355,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
         <div class="f full" id="w-issue"><label for="issue">Issue description <i>*</i></label><textarea id="issue" placeholder="What is wrong, where, how bad. e.g. RH front door flush out 2 mm"></textarea><div class="chips" id="issueChips"></div><span class="err" id="e-issue"></span></div>
         <div class="f" id="w-bay"><label for="bay">Bay <i>*</i></label><input id="bay" list="bayList" placeholder="e.g. Bay 12" autocomplete="off"><span class="err" id="e-bay"></span></div>
         <div class="f" id="w-maker"><label for="maker">Made by (operator / PIC) <i>*</i></label><input id="maker" list="makerList" placeholder="Name or staff no." autocomplete="off"><span class="err" id="e-maker"></span></div>
-        <div class="f"><label for="date">Date</label><input id="date" type="date"></div>
+        <div class="f"><label for="date">Date &amp; time it happened</label><div class="dt2"><input id="date" type="date"><input id="time" type="time" aria-label="Time it happened"></div></div>
         <div class="f"><label for="vin">Body / VIN no.</label><input id="vin" placeholder="Optional" autocomplete="off"></div>
         <div class="f full"><label for="rem">Remarks / containment action</label><input id="rem" placeholder="Optional"></div>
       </div>
@@ -416,7 +418,7 @@ td .ti div{overflow:hidden}td .ti b{font-weight:600;display:block;overflow:hidde
         <button class="btn2" id="copyCsv" type="button"><svg class="i"><use href="#i-copy"/></svg><span>Copy CSV</span></button></div>
     </div>
     <div class="achips" id="achR"></div>
-    <div class="scroll"><table class="stack"><thead><tr><th>Issue</th><th>Type</th><th>Sub</th><th>Bay</th><th>Made by</th><th>Date</th><th>Status</th></tr></thead><tbody id="tb"></tbody></table></div>
+    <div class="scroll"><table class="stack"><thead><tr><th>Issue</th><th>Type</th><th>Sub</th><th>Bay</th><th>Made by</th><th>Date &amp; time</th><th>Status</th></tr></thead><tbody id="tb"></tbody></table></div>
     <div id="rEmpty" hidden></div>
   </div>
 </section>
@@ -492,7 +494,13 @@ addEventListener('hashchange',route);
 let tT;function toast(m,undo){$('tMsg').textContent=m;const b=$('tBtn');b.hidden=!undo;b.onclick=()=>{undo&&undo();$('toast').classList.remove('on')};$('toast').classList.add('on');clearTimeout(tT);tT=setTimeout(()=>$('toast').classList.remove('on'),undo?6000:3000)}
 
 /* form */
-$('date').value=today();$('todayD').textContent=fmtD(today());
+const nowHM=()=>{const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+const hrOf=r=>/^\d\d:\d\d$/.test(r.time||'')?+r.time.slice(0,2):(r.createdAt?new Date(r.createdAt).getHours():0);
+const whenT=r=>fmtD(r.date)+(r.time?' · '+r.time:'');
+let timeSet=false;
+$('date').value=today();$('time').value=nowHM();$('todayD').textContent=fmtD(today());
+$('time').addEventListener('input',()=>{timeSet=!!$('time').value;preview()});
+setInterval(()=>{if(!timeSet&&document.activeElement!==$('time')){$('time').value=nowHM();preview()}},30000);
 try{const s=JSON.parse(localStorage.getItem('qm-last')||'{}');if(s.bay)$('bay').value=s.bay;if(s.type)setType(s.type)}catch{}
 function setType(t){type=t;document.querySelectorAll('.type').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));$('save').className='btn '+t;$('saveL').textContent='Save '+TN[t].toLowerCase();preview()}
 document.querySelectorAll('.type').forEach(b=>b.onclick=()=>setType(b.dataset.t));
@@ -501,7 +509,7 @@ document.querySelectorAll('.sub').forEach(b=>b.onclick=()=>setSub(b.dataset.s));
 ['issue','bay','maker','date'].forEach(k=>$(k).addEventListener('input',()=>{$('w-'+k)?.classList.remove('bad');if($('e-'+k))$('e-'+k).textContent='';preview()}));
 function preview(){
   $('tag').className='tag '+type;
-  const d=$('date').value;$('tgT').textContent=(type==='RT'?'ROAD TEST REJECTION':type==='AM'?'AFTER MARKET ISSUE':'TQO FINDING')+' · '+(d===today()?'today':fmtD(d));
+  const d=$('date').value;$('tgT').textContent=(type==='RT'?'ROAD TEST REJECTION':type==='AM'?'AFTER MARKET ISSUE':'TQO FINDING')+' · '+(d===today()?'today':fmtD(d))+($('time').value?' '+$('time').value:'');
   $('tgI').textContent=$('issue').value.trim()||'Describe the issue…';
   $('tgS').textContent=sub||'—';$('tgB').textContent=$('bay').value.trim()||'—';$('tgM').textContent=$('maker').value.trim()||'—';
   $('tgP').innerHTML=photos.map(p=>`<img src="${p.url}" alt="">`).join('');
@@ -519,7 +527,7 @@ async function addFiles(list){for(const f of [...list]){if(photos.length>=3)brea
 function drawThumbs(){const t=$('thumbs');t.hidden=!photos.length;$('dropTxt').hidden=!!photos.length;$('phCt').textContent=photos.length+' / 3';
   t.innerHTML=photos.map((p,i)=>`<div class="th"><img src="${p.url}" alt="Photo ${i+1}"><button type="button" data-i="${i}" aria-label="Remove photo"><svg class="i" style="width:16px;height:16px"><use href="#i-x"/></svg></button></div>`).join('')+(photos.length&&photos.length<3?'<div class="th add">+ Add</div>':'');
   t.querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();URL.revokeObjectURL(photos[+b.dataset.i].url);photos.splice(+b.dataset.i,1);drawThumbs()});preview()}
-function resetForm(keepBay){photos.forEach(p=>URL.revokeObjectURL(p.url));photos=[];drawThumbs();['issue','vin','rem','maker'].forEach(k=>$(k).value='');if(!keepBay)$('bay').value='';setSub('');$('date').value=today();preview()}
+function resetForm(keepBay){photos.forEach(p=>URL.revokeObjectURL(p.url));photos=[];drawThumbs();['issue','vin','rem','maker'].forEach(k=>$(k).value='');if(!keepBay)$('bay').value='';setSub('');$('date').value=today();timeSet=false;$('time').value=nowHM();preview()}
 $('clear').onclick=()=>resetForm(false);
 function validate(){let ok=true;const need=[['issue','Describe the issue'],['bay','Enter the bay'],['maker','Who made it?']];for(const [k,m] of need){const bad=!$(k).value.trim();$('w-'+k).classList.toggle('bad',bad);$('e-'+k).textContent=bad?m:'';if(bad&&ok){$(k).focus();ok=false}}if(!sub){$('e-sub').textContent='Pick a sub';if(ok)$('subs').scrollIntoView({block:'center'});ok=false}return ok}
 $('f').onsubmit=async e=>{
@@ -527,7 +535,8 @@ $('f').onsubmit=async e=>{
   const btn=$('save');btn.disabled=true;$('saveL').textContent='Saving…';
   try{
     const ph=[];for(const p of photos){const t=await shrink(p.blob,360,.7);ph.push({full:await toData(p.blob),thumb:await toData(t)})}
-    const rec={type,date:$('date').value||today(),issue:$('issue').value.trim(),sub,bay:$('bay').value.trim(),maker:$('maker').value.trim(),vin:$('vin').value.trim(),remarks:$('rem').value.trim()};
+    if(!timeSet)$('time').value=nowHM();
+    const rec={type,date:$('date').value||today(),time:$('time').value,issue:$('issue').value.trim(),sub,bay:$('bay').value.trim(),maker:$('maker').value.trim(),vin:$('vin').value.trim(),remarks:$('rem').value.trim()};
     let mini='';if(photos[0]){try{mini=await toData(await shrink(photos[0].blob,160,.6))}catch{}}
     const saved=await api('addIssue',rec,ph,mini);if(mini)TH[saved._id]=mini;rows=[saved].concat(rows.filter(r=>r._id!==saved._id));refresh();
     const undo=()=>api('deleteIssue',saved._id).then(()=>{rows=rows.filter(r=>r._id!==saved._id);refresh()}).catch(()=>toast('Could not undo'));
@@ -591,11 +600,11 @@ function spark(vals,c){const mx=Math.max(1,...vals),n=vals.length;const p=vals.m
 function renderDash(){
   const isDay=range==='day';if(isDay&&(dayFollow||!selDay))selDay=today();
   $('daynav').hidden=!isDay;if(isDay){$('dPick').value=selDay;$('dPick').max=today();$('dNext').disabled=selDay>=today();$('dToday').hidden=selDay===today();$('dLab').textContent=selDay===today()?'Today':new Date(selDay+'T00:00').toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})}
-  $('trendT').textContent=isDay?'Issues by hour keyed in':'Daily trend';
+  $('trendT').textContent=isDay?'Issues by hour it happened':'Daily trend';
   $('fReset').disabled=range===DEF()&&!$('fType').value&&!$('fSub').value;
   chips($('achD'),$('fbD'),[{t:isDay?(selDay===today()?'Today':fmtD(selDay)):range?'Last '+range+' days':'All time',on:range!==DEF(),fix:!isDay,clear:()=>document.querySelector('#range button[data-d="'+DEF()+'"]').click()},{t:lab($('fType')),on:!!$('fType').value,c:DOT[$('fType').value]||'var(--tqo)',clear:clr('fType')},{t:lab($('fSub')),on:!!$('fSub').value,clear:clr('fSub')}]);
   const n=isDay?1:span(),b=base();let f,prev,keys,bucketOf;
-  if(isDay){f=b.filter(r=>r.date===selDay);prev=b.filter(r=>r.date===dayShift(selDay,-1));keys=[...Array(24).keys()];bucketOf=r=>r.createdAt?new Date(r.createdAt).getHours():0}
+  if(isDay){f=b.filter(r=>r.date===selDay);prev=b.filter(r=>r.date===dayShift(selDay,-1));keys=[...Array(24).keys()];bucketOf=hrOf}
   else{const from=shift(-(n-1)),to=today();f=range?inRange(b,from,to):b;prev=range?inRange(b,shift(-(2*n-1)),shift(-n)):null;keys=dayKeys(n);bucketOf=r=>r.date}
   const daily=(a,fn)=>keys.map(k=>a.filter(r=>bucketOf(r)===k&&fn(r)).length);
   const K=[['Total issues',r=>true,'var(--ink)'],['TQO findings',r=>tyOf(r)==='TQO','var(--tqo)'],['Road test rejections',r=>tyOf(r)==='RT','var(--rt)'],['After market issues',r=>tyOf(r)==='AM','var(--am)'],['Still open',r=>r.status!=='Closed','var(--sig)']];
@@ -650,16 +659,16 @@ function recF(){const q=norm($('q').value),t=$('rType').value,s=$('rSub').value,
 function renderRecords(){const f=recF();$('rReset').disabled=!$('rType').value&&!$('rSub').value&&!$('rSt').value;
   chips($('achR'),$('fbR'),[{t:lab($('rType')),on:!!$('rType').value,c:DOT[$('rType').value]||'var(--tqo)',clear:clr('rType')},{t:lab($('rSub')),on:!!$('rSub').value,clear:clr('rSub')},{t:lab($('rSt')),on:!!$('rSt').value,c:$('rSt').value==='Closed'?'var(--ok)':'var(--rt)',clear:clr('rSt')}]);$('rCt').textContent=f.length+' of '+rows.length;
   $('rEmpty').hidden=!!f.length;$('rEmpty').innerHTML=rows.length?emptyH('No records match these filters.'):emptyH('No records yet.',true);
-  $('tb').innerHTML=f.map(r=>`<tr data-id="${esc(r._id)}" tabindex="0"><td><div class="ti">${thumb(r)}<div><b>${esc(r.issue)}</b>${r.vin?`<small>VIN ${esc(r.vin)}</small>`:''}</div></div></td><td><span class="pill ${tyOf(r)}">${(tyOf(r)==='RT'?'Road test':tyOf(r)==='AM'?'After market':'TQO')}</span></td><td class="nw">${esc(r.sub)}</td><td>${esc(r.bay)}</td><td>${esc(r.maker)}</td><td class="nw">${esc(fmtD(r.date))}</td><td><span class="pill ${r.status==='Closed'?'Closed':'Open'}">${r.status==='Closed'?'Closed':'Open'}</span></td></tr>`).join('')}
+  $('tb').innerHTML=f.map(r=>`<tr data-id="${esc(r._id)}" tabindex="0"><td><div class="ti">${thumb(r)}<div><b>${esc(r.issue)}</b>${r.vin?`<small>VIN ${esc(r.vin)}</small>`:''}</div></div></td><td><span class="pill ${tyOf(r)}">${(tyOf(r)==='RT'?'Road test':tyOf(r)==='AM'?'After market':'TQO')}</span></td><td class="nw">${esc(r.sub)}</td><td>${esc(r.bay)}</td><td>${esc(r.maker)}</td><td class="nw">${esc(whenT(r))}</td><td><span class="pill ${r.status==='Closed'?'Closed':'Open'}">${r.status==='Closed'?'Closed':'Open'}</span></td></tr>`).join('')}
 $('tb').onclick=e=>{const tr=e.target.closest('tr');if(tr)openDrw(tr.dataset.id)};
 $('tb').onkeydown=e=>{if(e.key==='Enter'){const tr=e.target.closest('tr');if(tr)openDrw(tr.dataset.id)}};
-$('copyCsv').onclick=async()=>{const h=['Date','Type','Issue','Sub','Bay','Made by','VIN','Remarks','Status'];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[h.join(',')].concat(recF().map(r=>[r.date,TN[tyOf(r)],r.issue,r.sub,r.bay,r.maker,r.vin,r.remarks,r.status].map(q).join(','))).join('\n');try{await navigator.clipboard.writeText(csv);toast('Copied '+recF().length+' rows. Paste into Excel.')}catch{toast('Copy was blocked by the browser')}};
+$('copyCsv').onclick=async()=>{const h=['Date','Time','Type','Issue','Sub','Bay','Made by','VIN','Remarks','Status'];const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[h.join(',')].concat(recF().map(r=>[r.date,r.time||'',TN[tyOf(r)],r.issue,r.sub,r.bay,r.maker,r.vin,r.remarks,r.status].map(q).join(','))).join('\n');try{await navigator.clipboard.writeText(csv);toast('Copied '+recF().length+' rows. Paste into Excel.')}catch{toast('Copy was blocked by the browser')}};
 
 /* drawer */
 function openDrw(id){cur=rows.find(r=>r._id===id);if(!cur)return;fillDrw();$('scrim').classList.add('on');$('drw').classList.add('on');$('drw').setAttribute('aria-hidden','false');$('dX').focus()}
 function fillDrw(){const r=cur,cl=r.status==='Closed';$('dPill').innerHTML=`<span class="pill ${tyOf(r)}">${esc(TN[tyOf(r)])}</span>`;$('dSt').innerHTML=`<span class="pill ${cl?'Closed':'Open'}">${cl?'Closed':'Open'}</span>`;
   const ims=(r.photos||[]).map(p=>imgSrc(p,true)).filter(Boolean);
-  $('dB').innerHTML=`<h3>${esc(r.issue)}</h3>${ims.length?`<div class="gal">${ims.map(s=>`<img src="${esc(s)}" alt="Issue photo">`).join('')}</div>`:''}<dl class="kv"><dt>Sub</dt><dd>${esc(r.sub)}</dd><dt>Bay</dt><dd>${esc(r.bay)}</dd><dt>Made by</dt><dd>${esc(r.maker)}</dd><dt>Date</dt><dd>${esc(fmtD(r.date))}</dd>${r.vin?`<dt>Body / VIN</dt><dd>${esc(r.vin)}</dd>`:''}${r.remarks?`<dt>Remarks</dt><dd>${esc(r.remarks)}</dd>`:''}<dt>Keyed in</dt><dd>${r.createdAt?esc(new Date(r.createdAt).toLocaleString()):''}</dd></dl>`;
+  $('dB').innerHTML=`<h3>${esc(r.issue)}</h3>${ims.length?`<div class="gal">${ims.map(s=>`<img src="${esc(s)}" alt="Issue photo">`).join('')}</div>`:''}<dl class="kv"><dt>Sub</dt><dd>${esc(r.sub)}</dd><dt>Bay</dt><dd>${esc(r.bay)}</dd><dt>Made by</dt><dd>${esc(r.maker)}</dd><dt>Happened</dt><dd>${esc(whenT(r))}</dd>${r.vin?`<dt>Body / VIN</dt><dd>${esc(r.vin)}</dd>`:''}${r.remarks?`<dt>Remarks</dt><dd>${esc(r.remarks)}</dd>`:''}<dt>Keyed in</dt><dd>${r.createdAt?esc(new Date(r.createdAt).toLocaleString()):''}</dd></dl>`;
   $('dTog').textContent=cl?'Reopen issue':'Mark as closed';$('dTog').className='btn'+(cl?'':' ');$('dTog').style.background=cl?'':'var(--ok)';$('dDel').textContent='Delete';$('dDel').dataset.c=''}
 function closeDrw(){if(editing)endEdit();$('scrim').classList.remove('on');$('drw').classList.remove('on');$('drw').setAttribute('aria-hidden','true');cur=null}
 $('dX').onclick=closeDrw;$('scrim').onclick=closeDrw;
@@ -678,10 +687,10 @@ function startEdit(){const r=cur;if(!r)return;editing=true;ekeep=(r.photos||[]).
   <div class="f"><label>Sub</label>${segH('sub',SUBS.map(x=>[x,x]),esub)}</div>
   <div class="f"><label for="e_issue">Issue description *</label><textarea id="e_issue"></textarea></div>
   <div class="row2"><div class="f"><label for="e_bay">Bay *</label><input id="e_bay" list="bayList"></div><div class="f"><label for="e_maker">Made by *</label><input id="e_maker" list="makerList"></div></div>
-  <div class="row2"><div class="f"><label for="e_date">Date</label><input id="e_date" type="date"></div><div class="f"><label for="e_vin">Body / VIN no.</label><input id="e_vin"></div></div>
+  <div class="row2"><div class="f"><label for="e_date">Date &amp; time</label><div class="dt2"><input id="e_date" type="date"><input id="e_time" type="time" aria-label="Time it happened"></div></div><div class="f"><label for="e_vin">Body / VIN no.</label><input id="e_vin"></div></div>
   <div class="f"><label for="e_rem">Remarks / containment action</label><input id="e_rem"></div>
   <div class="f"><label>Photos (up to 3)</label><div class="eph" id="eph"></div></div></div>`;
-  $('e_issue').value=r.issue||'';$('e_bay').value=r.bay||'';$('e_maker').value=r.maker||'';$('e_date').value=r.date||'';$('e_vin').value=r.vin||'';$('e_rem').value=r.remarks||'';
+  $('e_issue').value=r.issue||'';$('e_bay').value=r.bay||'';$('e_maker').value=r.maker||'';$('e_date').value=r.date||'';$('e_time').value=r.time||'';$('e_vin').value=r.vin||'';$('e_rem').value=r.remarks||'';
   drawEph();['dDel','dEdit','dTog'].forEach(i=>$(i).hidden=true);['dCancel','dSave'].forEach(i=>$(i).hidden=false);$('e_issue').focus()}
 function endEdit(){editing=false;enew.forEach(p=>URL.revokeObjectURL(p.url));enew=[];['dDel','dEdit','dTog'].forEach(i=>$(i).hidden=false);['dCancel','dSave'].forEach(i=>$(i).hidden=true);$('dSave').disabled=false;$('dSave').textContent='Save changes'}
 $('dEdit').onclick=startEdit;
@@ -692,7 +701,7 @@ $('dB').addEventListener('click',e=>{if(!editing)return;const sb=e.target.closes
   if(e.target.closest('#eadd'))$('efile').click()});
 $('efile').onchange=async()=>{for(const f of [...$('efile').files]){if(ekeep.length+enew.length>=3)break;if(!f.type.startsWith('image/'))continue;try{const b=await shrink(f,1600,.82);enew.push({blob:b,url:URL.createObjectURL(b)})}catch{toast('Could not read that image')}}$('efile').value='';drawEph()};
 $('dSave').onclick=async()=>{if(!cur||!editing)return;const id=cur._id;
-  const rec={type:etype,sub:esub,issue:$('e_issue').value.trim(),bay:$('e_bay').value.trim(),maker:$('e_maker').value.trim(),date:$('e_date').value,vin:$('e_vin').value.trim(),remarks:$('e_rem').value.trim()};
+  const rec={type:etype,sub:esub,issue:$('e_issue').value.trim(),bay:$('e_bay').value.trim(),maker:$('e_maker').value.trim(),date:$('e_date').value,time:$('e_time').value,vin:$('e_vin').value.trim(),remarks:$('e_rem').value.trim()};
   if(!rec.issue||!rec.bay||!rec.maker||!rec.sub){toast('Issue, sub, bay and made by are required');return}
   const b=$('dSave');b.disabled=true;b.textContent='Saving…';
   try{const ph=[];for(const p of enew){const t=await shrink(p.blob,360,.7);ph.push({full:await toData(p.blob),thumb:await toData(t)})}
@@ -716,7 +725,7 @@ function boot(){let b=null;try{b=JSON.parse(localStorage.getItem('qm-cache')||'n
   setInterval(load,30000);document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastOk>15000)load()})}
 preview();drawThumbs();route();renderSide();boot();
 /* auto-update: reload when a newer version of this page is published */
-const APPV='20261126a';
+const APPV='20261126b';
 function checkUpdate(){if(document.hidden)return;fetch(location.href.split('#')[0],{cache:'reload'}).then(r=>r.ok?r.text():'').then(t=>{const m=t.match(/const APPV='([^']+)'/);if(!m||m[1]===APPV)return;let done='';try{done=sessionStorage.getItem('qm-upd')||''}catch{}if(done===m[1])return;
   const busy=editing||$('issue').value.trim()||photos.length||$('bay')===document.activeElement||$('maker')===document.activeElement;if(busy)return;try{sessionStorage.setItem('qm-upd',m[1])}catch{}location.reload()}).catch(()=>{})}
 setTimeout(checkUpdate,4000);setInterval(checkUpdate,10*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate()});
